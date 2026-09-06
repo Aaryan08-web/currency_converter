@@ -1,0 +1,332 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    height: 100%;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+    background: linear-gradient(180deg, #0f1b4d 0%, #1a2a7a 100%);
+    min-height: 100vh;      /* fallback for browsers without dvh support */
+    min-height: 100dvh;     /* accounts for mobile browser chrome, fixes iOS/Android layout jump */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.container {
+    width: 100%;
+    max-width: 620px;
+    margin: 0 auto;
+}
+
+h1 {
+    text-align: center;
+    color: white;
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 40px;
+}
+
+form {
+    background: white;
+    border-radius: 20px;
+    padding: 32px 28px;
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.18);
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.amount {
+    display: block;
+    font-size: 1.5rem;
+    color: black;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+
+#amount {
+    width: 100%;
+    font-size: 1.15rem;
+    font-weight: 500;
+    padding: 10px 0;
+    border: none;
+    border-bottom: 3px solid #e2e8f0;
+    outline: none;
+    color: #1e2937;
+    background: transparent;
+    transition: border-color 0.2s ease;
+}
+
+#amount:focus {
+    border-bottom-color: #4f46e5;
+}
+
+#amount.invalid {
+    border-bottom-color: #dc2626;
+}
+
+.field-error {
+    min-height: 1.2em;
+    margin-top: 6px;
+    margin-bottom: 6px;
+    font-size: 0.85rem;
+    color: #dc2626;
+    font-weight: 500;
+}
+
+.currency-select {
+    margin-top: 20px;
+}
+
+.form-label,
+.to-label {
+    margin-bottom: 10px;
+}
+
+.form-label label,
+.to-label label {
+    font-size: 1.2rem;
+    color: black;
+    font-weight: 600;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.form-label div,
+.to-label div {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 10px 10px;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-label div:focus-within,
+.to-label div:focus-within {
+    border-color: #4f46e5;
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+}
+
+.form-label img,
+.to-label img {
+    width: 60px;
+    height: 60px;
+    border-radius: 100px;
+    object-fit: cover;
+    background: #e2e8f0;
+    flex-shrink: 0;
+}
+
+.form-label select,
+.to-label select {
+    width: 100%;
+    font-size: 1.2rem;
+    font-weight: 500;
+    border: none;
+    background: transparent;
+    outline: none;
+    cursor: pointer;
+    color: #1e2937;
+}
+
+.swap-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 52px;
+    margin: 16px auto;
+    background: white;
+    border: 2px solid #e2e8f0;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.swap-btn i {
+    font-size: 1.4rem;
+    color: #4f46e5;
+    transition: transform 0.4s ease;
+}
+
+.swap-btn:hover {
+    border-color: #4f46e5;
+    background: #eef2ff;
+}
+
+.swap-btn:hover i {
+    transform: rotate(180deg);
+    color: #3730a3;
+}
+
+.swap-btn:focus-visible,
+#amount:focus-visible,
+select:focus-visible,
+#convert:focus-visible {
+    outline: 3px solid #4f46e5;
+    outline-offset: 2px;
+}
+
+#convert {
+    width: 100%;
+    background: #2563eb;
+    color: white;
+    border: none;
+    padding: 18px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    border-radius: 14px;
+    margin-top: 20px;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+#convert:hover:not(:disabled) {
+    background: #1d4ed8;
+    transform: translateY(-2px);
+}
+
+#convert:disabled {
+    background: #94a3b8;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.btn-spinner {
+    display: none;
+    width: 18px;
+    height: 18px;
+    border: 3px solid rgba(255, 255, 255, 0.4);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+}
+
+#convert.loading .btn-spinner {
+    display: inline-block;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+#result {
+    background: white;
+    margin-top: 15px;
+    padding: 20px 20px;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    display: none;
+    color: #1e2937;
+}
+
+#result.visible {
+    display: block;
+}
+
+#result .result-main {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin: 0 0 6px;
+}
+
+#result .result-rate {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #64748b;
+    margin: 0 0 8px;
+}
+
+#result .result-updated {
+    font-size: 0.78rem;
+    color: #94a3b8;
+    margin: 0;
+}
+
+#result .result-error {
+    color: #dc2626;
+    font-weight: 600;
+    margin: 0;
+}
+
+.attribution {
+    text-align: center;
+    margin-top: 14px;
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.75);
+}
+
+.attribution a {
+    color: white;
+    text-decoration: underline;
+}
+
+.attribution a:focus-visible {
+    outline: 2px solid white;
+    outline-offset: 2px;
+}
+
+/* RESPONSIVE DESIGN */
+@media (max-width: 480px) {
+    h1 {
+        font-size: 1.9rem;
+        margin-bottom: 30px;
+    }
+
+    form {
+        padding: 28px 20px;
+    }
+
+    .form-label img,
+    .to-label img {
+        width: 45px;
+        height: 45px;
+    }
+
+    #amount {
+        font-size: 1.9rem;
+    }
+
+    #convert {
+        padding: 16px;
+        font-size: 1.1rem;
+    }
+}
+
+@media (max-width: 360px) {
+    form {
+        padding: 25px 18px;
+    }
+
+    .form-label div,
+    .to-label div {
+        padding: 12px 14px;
+    }
+}
+
+/* Tablet */
+@media (min-width: 481px) and (max-width: 768px) {
+    .container {
+        max-width: 580px;
+    }
+
+    form {
+        padding: 35px 30px;
+    }
+}
