@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Currency Converter — Move Money Across Currencies, Seamlessly</title>
+    <meta name="description" content="Convert currencies instantly with accurate exchange rates and a simple, seamless experience for over 160 world currencies.">
+    <meta name="theme-color" content="#007ACC">
+
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+        integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer" />
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Flow-field currency symbol background canvas -->
+    <canvas id="bgCanvas" aria-hidden="true"></canvas>
+
+    <!-- Site Header & Navigation -->
+    <header class="site-header" id="top">
+        <div class="header-inner container">
+            <a href="#home" class="brand" aria-label="Currency Converter Home">
+                <span class="brand-icon">
+                    <i class="fa-solid fa-arrow-right-arrow-left" aria-hidden="true"></i>
+                </span>
+                <span class="brand-name">Currency <span class="brand-highlight">Converter</span></span>
+            </a>
+
+            <!-- Desktop & Mobile Navigation Links -->
+            <nav class="nav-menu" id="navMenu" aria-label="Main Navigation">
+                <ul class="nav-list">
+                    <li><a href="#home" class="nav-link active">Home</a></li>
+                    <li><a href="#converter" class="nav-link">Converter</a></li>
+                    <li><a href="#rates" class="nav-link">Exchange Rates</a></li>
+                </ul>
+                <div class="nav-cta-mobile">
+                    <a href="#converter" class="btn btn-primary btn-block mobile-nav-close">Convert Now</a>
+                </div>
+            </nav>
+
+            <div class="header-actions">
+                <a href="#converter" class="btn btn-primary nav-cta">Convert Now</a>
+                <button type="button" class="mobile-toggle" id="mobileToggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="navMenu">
+                    <span class="bar bar-1"></span>
+                    <span class="bar bar-2"></span>
+                    <span class="bar bar-3"></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main id="mainContent">
+
+        <!-- Hero Section -->
+        <section class="hero-section" id="home">
+            <div class="hero-bg-accent" aria-hidden="true"></div>
+            <div class="container hero-container">
+                <div class="hero-badge">
+                    <span class="badge-dot"></span>
+                    <span>Live Exchange Rates • 160+ Currencies</span>
+                </div>
+                <h1 class="hero-title">
+                    Move Money Across Currencies, <span class="highlight-text">Seamlessly.</span>
+                </h1>
+                <p class="hero-subtitle">
+                    Convert currencies with reliable exchange rates, a simple experience and real-time rate information.
+                </p>
+                <div class="hero-actions">
+                    <a href="#converter" class="btn btn-primary btn-lg">
+                        <i class="fa-solid fa-calculator" aria-hidden="true"></i>
+                        <span>Start Converting</span>
+                    </a>
+                    <a href="#rates" class="btn btn-outline btn-lg">
+                        <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                        <span>Explore Rates</span>
+                    </a>
+                </div>
+
+                <!-- Trust Metrics / Highlights -->
+                <div class="hero-metrics">
+                    <div class="metric-item">
+                        <span class="metric-value">160+</span>
+                        <span class="metric-label">Supported Currencies</span>
+                    </div>
+                    <div class="metric-divider" aria-hidden="true"></div>
+                    <div class="metric-item">
+                        <span class="metric-value">24h</span>
+                        <span class="metric-label">Smart Rate Caching</span>
+                    </div>
+                    <div class="metric-divider" aria-hidden="true"></div>
+                    <div class="metric-item">
+                        <span class="metric-value">0%</span>
+                        <span class="metric-label">Hidden Markups</span>
+                    </div>
+                    <div class="metric-divider" aria-hidden="true"></div>
+                    <div class="metric-item">
+                        <span class="metric-value">100%</span>
+                        <span class="metric-label">Client-Side & Free</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Currency Converter Section -->
+        <section class="converter-section" id="converter">
+            <div class="container">
+                <div class="section-intro text-center">
+                    <span class="section-pill">Currency Exchange</span>
+                    <h2 class="section-title">Currency Converter</h2>
+                    <p class="section-desc">Convert currencies instantly with accurate exchange rates and a simple, seamless experience.</p>
+                </div>
+
+                <!-- Main Exchange Card -->
+                <div class="exchange-card" id="exchangeCard">
+                    <!-- Exchange Card Header -->
+                    <div class="card-header">
+                        <div class="card-title-group">
+                            <div class="card-icon">
+                                <i class="fa-solid fa-coins" aria-hidden="true"></i>
+                            </div>
+                            <div>
+                                <h3 class="card-title">Exchange Currencies</h3>
+                                <p class="card-subtitle">Real-time mid-market rate calculation</p>
+                            </div>
+                        </div>
+                        <div class="live-status-pill">
+                            <span class="status-pulse"></span>
+                            <span class="status-text">Live Rates</span>
+                        </div>
+                    </div>
+
+                    <!-- Converter Form -->
+                    <form id="converterForm" class="converter-form" novalidate>
+                        <!-- Amount Input Group -->
+                        <div class="form-group amount-group">
+                            <div class="amount-header">
+                                <label for="amount" class="form-label">Amount</label>
+                                <div class="quick-presets" role="group" aria-label="Quick amount presets">
+                                    <button type="button" class="preset-btn active" data-preset="1">1</button>
+                                    <button type="button" class="preset-btn" data-preset="10">10</button>
+                                    <button type="button" class="preset-btn" data-preset="100">100</button>
+                                    <button type="button" class="preset-btn" data-preset="500">500</button>
+                                    <button type="button" class="preset-btn" data-preset="1000">1,000</button>
+                                    <button type="button" class="preset-btn" data-preset="5000">5,000</button>
+                                </div>
+                            </div>
+                            <div class="input-wrapper">
+                                <span class="input-prefix" id="amountPrefix" aria-hidden="true">$</span>
+                                <input
+                                    type="number"
+                                    id="amount"
+                                    name="amount"
+                                    value="1"
+                                    placeholder="Enter amount"
+                                    inputmode="decimal"
+                                    step="any"
+                                    min="0"
+                                    autocomplete="off"
+                                    aria-describedby="amountError"
+                                    required
+                                >
+                            </div>
+                            <p id="amountError" class="field-error" role="alert" aria-live="polite"></p>
+                        </div>
+
+                        <!-- Currency Selector Row -->
+                        <div class="currency-row">
+                            <!-- From Currency Selector -->
+                            <div class="currency-field from-field">
+                                <label for="from" class="form-label">From</label>
+                                <div class="selector-box">
+                                    <img id="fromFlag" src="" width="36" height="36" alt="" class="flag-img">
+                                    <select id="from" name="from" aria-label="Source Currency"></select>
+                                    <span class="selector-caret" aria-hidden="true">
+                                        <i class="fa-solid fa-chevron-down"></i>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <!-- Swap Button -->
+                            <div class="swap-action">
+                                <button type="button" id="swapBtn" class="swap-btn" aria-label="Swap from and to currencies" title="Swap currencies">
+                                    <i class="fa-solid fa-arrow-right-arrow-left" aria-hidden="true"></i>
+                                </button>
+                            </div>
+
+                            <!-- To Currency Selector -->
+                            <div class="currency-field to-field">
+                                <label for="to" class="form-label">To</label>
+                                <div class="selector-box">
+                                    <img id="toFlag" src="" width="36" height="36" alt="" class="flag-img">
+                                    <select id="to" name="to" aria-label="Target Currency"></select>
+                                    <span class="selector-caret" aria-hidden="true">
+                                        <i class="fa-solid fa-chevron-down"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Convert Submit Button -->
+                        <div class="form-action">
+                            <button type="submit" id="convert" class="btn btn-primary btn-block btn-convert">
+                                <span class="btn-label">
+                                    <i class="fa-solid fa-arrows-rotate" aria-hidden="true"></i>
+                                    <span>Convert Currency</span>
+                                </span>
+                                <span class="btn-spinner" aria-hidden="true"></span>
+                            </button>
+                        </div>
+                    </form>
+
+                    <!-- Result Display Section -->
+                    <div id="result" class="result-box" role="status" aria-live="polite"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Popular Currency Pairs Section -->
+        <section class="popular-section" id="rates">
+            <div class="container">
+                <div class="section-intro text-center">
+                    <span class="section-pill">Global Rates</span>
+                    <h2 class="section-title">Popular Currency Pairs</h2>
+                    <p class="section-desc">Select any pair to quickly load real-time exchange rates into the converter.</p>
+                </div>
+
+                <div class="popular-grid" id="popularPairsGrid">
+                    <!-- Pair 1: USD to INR -->
+                    <div class="pair-card" data-from="USD" data-to="INR" role="button" tabindex="0" aria-label="Convert USD to INR">
+                        <div class="pair-header">
+                            <div class="pair-flags">
+                                <img src="https://flagsapi.com/US/flat/64.png" alt="USD flag" class="flag-img pair-flag" width="28" height="28" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 64 64\'><circle cx=\'32\' cy=\'32\' r=\'30\' fill=\'%23e2e8f0\'/></svg>'">
+                                <span class="pair-arrow"><i class="fa-solid fa-arrow-right"></i></span>
+                                <img src="https://flagsapi.com/IN/flat/64.png" alt="INR flag" class="flag-img pair-flag" width="28" height="28" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 64 64\'><circle cx=\'32\' cy=\'32\' r=\'30\' fill=\'%23e2e8f0\'/></svg>'">
+                            </div>
+                            <span class="pair-badge">Popular</span>
+                        </div>
+                        <div class="pair-codes">USD &rarr; INR</div>
+                        <div class="pair-names">US Dollar to Indian Rupee</div>
+                        <div class="pair-rate-wrap">
+                            <span class="pair-rate" data-rate-from="USD" data-rate-to="INR">Fetching rate…</span>
+                        </div>
+                        <div class="pair-cta">
+                            <span>Convert this pair</span>
+                            <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                        </div>
+                    </div>
+
+                    <!-- Pair 2: EUR to INR -->
+                    <div class="pair-card" data-from="EUR" data-to="INR" role="button" tabindex="0" aria-label="Convert EUR to INR">
+                        <div class="pair-header">
+                            <div class="pair-flags">
+                                <span class="pair-flag-icon"><i class="fa-solid fa-earth-europe"></i></span>
+                                <span class="pair-arrow"><i class="fa-solid fa-arrow-right"></i></span>
+                                <img src="https://flagsapi.com/IN/flat/64.png" alt="INR flag" class="flag-img pair-flag" width="28" height="28" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 64 64\'><circle cx=\'32\' cy=\'32\' r=\'30\' fill=\'%23e2e8f0\'/></svg>'">
+                            </div>
+                            <span class="pair-badge">Popular</span>
+                        </div>
+                        <div class="pair-codes">EUR &rarr; INR</div>
+                        <div class="pair-names">Euro to Indian Rupee</div>
+                        <div class="pair-rate-wrap">
+                            <span class="pair-rate" data-rate-from="EUR" data-rate-to="INR">Fetching rate…</span>
+                        </div>
+                        <div class="pair-cta">
+                            <span>Convert this pair</span>
+                            <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                        </div>
+                    </div>
+
+                    <!-- Pair 3: GBP to INR -->
+                    <div class="pair-card" data-from="GBP" data-to="INR" role="button" tabindex="0" aria-label="Convert GBP to INR">
+                        <div class="pair-header">
+                            <div class="pair-flags">
+                                <img src="https://flagsapi.com/GB/flat/64.png" alt="GBP flag" class="flag-img pair-flag" width="28" height="28" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 64 64\'><circle cx=\'32\' cy=\'32\' r=\'30\' fill=\'%23e2e8f0\'/></svg>'">
+                                <span class="pair-arrow"><i class="fa-solid fa-arrow-right"></i></span>
+                                <img src="https://flagsapi.com/IN/flat/64.png" alt="INR flag" class="flag-img pair-flag" width="28" height="28" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 64 64\'><circle cx=\'32\' cy=\'32\' r=\'30\' fill=\'%23e2e8f0\'/></svg>'">
+                            </div>
+                            <span class="pair-badge">Popular</span>
+                        </div>
+                        <div class="pair-codes">GBP &rarr; INR</div>
+                        <div class="pair-names">British Pound to Indian Rupee</div>
+                        <div class="pair-rate-wrap">
+                            <span class="pair-rate" data-rate-from="GBP" data-rate-to="INR">Fetching rate…</span>
+                        </div>
+                        <div class="pair-cta">
+                            <span>Convert this pair</span>
+                            <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                        </div>
+                    </div>
+
+                    <!-- Pair 4: USD to EUR -->
+                    <div class="pair-card" data-from="USD" data-to="EUR" role="button" tabindex="0" aria-label="Convert USD to EUR">
+                        <div class="pair-header">
+                            <div class="pair-flags">
+                                <img src="https://flagsapi.com/US/flat/64.png" alt="USD flag" class="flag-img pair-flag" width="28" height="28" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 64 64\'><circle cx=\'32\' cy=\'32\' r=\'30\' fill=\'%23e2e8f0\'/></svg>'">
+                                <span class="pair-arrow"><i class="fa-solid fa-arrow-right"></i></span>
+                                <span class="pair-flag-icon"><i class="fa-solid fa-earth-europe"></i></span>
+                            </div>
+                            <span class="pair-badge">Top Global</span>
+                        </div>
+                        <div class="pair-codes">USD &rarr; EUR</div>
+                        <div class="pair-names">US Dollar to Euro</div>
+                        <div class="pair-rate-wrap">
+                            <span class="pair-rate" data-rate-from="USD" data-rate-to="EUR">Fetching rate…</span>
+                        </div>
+                        <div class="pair-cta">
+                            <span>Convert this pair</span>
+                            <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                        </div>
+                    </div>
+
+                    <!-- Pair 5: USD to GBP -->
+                    <div class="pair-card" data-from="USD" data-to="GBP" role="button" tabindex="0" aria-label="Convert USD to GBP">
+                        <div class="pair-header">
+                            <div class="pair-flags">
+                                <img src="https://flagsapi.com/US/flat/64.png" alt="USD flag" class="flag-img pair-flag" width="28" height="28" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 64 64\'><circle cx=\'32\' cy=\'32\' r=\'30\' fill=\'%23e2e8f0\'/></svg>'">
+                                <span class="pair-arrow"><i class="fa-solid fa-arrow-right"></i></span>
+                                <img src="https://flagsapi.com/GB/flat/64.png" alt="GBP flag" class="flag-img pair-flag" width="28" height="28" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 64 64\'><circle cx=\'32\' cy=\'32\' r=\'30\' fill=\'%23e2e8f0\'/></svg>'">
+                            </div>
+                            <span class="pair-badge">Top Global</span>
+                        </div>
+                        <div class="pair-codes">USD &rarr; GBP</div>
+                        <div class="pair-names">US Dollar to British Pound</div>
+                        <div class="pair-rate-wrap">
+                            <span class="pair-rate" data-rate-from="USD" data-rate-to="GBP">Fetching rate…</span>
+                        </div>
+                        <div class="pair-cta">
+                            <span>Convert this pair</span>
+                            <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                        </div>
+                    </div>
+
+                    <!-- Pair 6: USD to JPY -->
+                    <div class="pair-card" data-from="USD" data-to="JPY" role="button" tabindex="0" aria-label="Convert USD to JPY">
+                        <div class="pair-header">
+                            <div class="pair-flags">
+                                <img src="https://flagsapi.com/US/flat/64.png" alt="USD flag" class="flag-img pair-flag" width="28" height="28" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 64 64\'><circle cx=\'32\' cy=\'32\' r=\'30\' fill=\'%23e2e8f0\'/></svg>'">
+                                <span class="pair-arrow"><i class="fa-solid fa-arrow-right"></i></span>
+                                <img src="https://flagsapi.com/JP/flat/64.png" alt="JPY flag" class="flag-img pair-flag" width="28" height="28" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 64 64\'><circle cx=\'32\' cy=\'32\' r=\'30\' fill=\'%23e2e8f0\'/></svg>'">
+                            </div>
+                            <span class="pair-badge">Top Global</span>
+                        </div>
+                        <div class="pair-codes">USD &rarr; JPY</div>
+                        <div class="pair-names">US Dollar to Japanese Yen</div>
+                        <div class="pair-rate-wrap">
+                            <span class="pair-rate" data-rate-from="USD" data-rate-to="JPY">Fetching rate…</span>
+                        </div>
+                        <div class="pair-cta">
+                            <span>Convert this pair</span>
+                            <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Scripts -->
+    <script src="currencies.js"></script>
+    <script src="script.js"></script>
+    <script src="background.js"></script>
+
+</body>
+</html>
